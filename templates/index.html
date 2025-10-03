@@ -8,11 +8,44 @@
 </div>
 
 <!-- Hero Section -->
-<section class="hero-hero d-flex align-items-center justify-content-center text-center text-dark">
-  <div class="container">
-    <h1 class="display-4 fw-bold">Wear a Piece of Nature</h1>
-    <p class="lead">Handcrafted jewelry made from real flowers</p>
-    <a href="#collections" class="btn btn-dark mt-3">Shop Collections</a>
+<section id="hero-carousel-section">
+  <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+
+      <div class="carousel-item active" data-bs-interval="5000">
+        <img src="/static/images/slider1.jpg" class="d-block w-100" alt="First slide">
+        <div class="carousel-caption-custom d-flex align-items-center justify-content-center text-center">
+          <div>
+            <h1 class="display-4 fw-bold">Wear a Piece of Nature</h1>
+            <p class="lead">Handcrafted jewelry made from real flowers</p>
+            <a href="#collections" class="btn btn-dark mt-3">Shop Collections</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item" data-bs-interval="5000">
+        <img src="/static/images/slider2.jpg" class="d-block w-100" alt="Second slide">
+        <div class="carousel-caption-custom d-flex align-items-center justify-content-center text-center">
+          <div>
+            <h1 class="display-4 fw-bold">Unique & Timeless</h1>
+            <p class="lead">Discover our latest seasonal collections</p>
+            <a href="#collections" class="btn btn-dark mt-3">Explore Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item" data-bs-interval="5000">
+        <img src="/static/images/slider3.jpg" class="d-block w-100" alt="Third slide">
+        <div class="carousel-caption-custom d-flex align-items-center justify-content-center text-center">
+          <div>
+            <h1 class="display-4 fw-bold">Perfectly Imperfect</h1>
+            <p class="lead">Each piece is one-of-a-kind, just like you</p>
+            <a href="#collections" class="btn btn-dark mt-3">Find Yours</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -35,5 +68,4 @@
     </div>
   </div>
 </section>
-
 {% endblock %}
