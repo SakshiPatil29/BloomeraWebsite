@@ -1,0 +1,40 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Promo Banner -->
+<div class="text-center p-3" style="background: #fdfdfd;">
+  <img src="{{ url_for('static', filename='images/banner.png') }}" alt="B1G1 Offer" class="img-fluid" style="max-height: 500px; object-fit: contain;">
+</div>
+
+<!-- Hero Section -->
+<section class="hero-hero d-flex align-items-center justify-content-center text-center text-dark">
+  <div class="container">
+    <h1 class="display-4 fw-bold">Wear a Piece of Nature</h1>
+    <p class="lead">Handcrafted jewelry made from real flowers</p>
+    <a href="#collections" class="btn btn-dark mt-3">Shop Collections</a>
+  </div>
+</section>
+
+<!-- Collections Section -->
+<!-- Collections Section -->
+<section id="collections" class="collections-section py-5">
+  <div class="container">
+    <h2 class="text-center mb-4 fw-bold">Our Collections</h2>
+    <div class="row g-4">
+      {% for cat in categories %}
+        <div class="col-md-4">
+          <div class="card category-card h-100 shadow-sm">
+            <img src="{{ url_for('static', filename='images/' ~ cat.slug ~ '.png') }}" class="card-img-top category-img" alt="{{ cat.name }}">
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ cat.name }}</h5>
+              <a href="{{ url_for('category_page', category=cat.slug) }}" class="btn btn-outline-dark">Explore</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+:root{
+  --accent:#f8f2ee;
+  --muted:#6c757d;
+  --card-radius:12px;
+}
+body {
+  background-color: #f7e8e0 !important;
+}
+body {
+  background: url("../images/flowers-bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+
+/* Semi-transparent overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 50%;
+  background: rgba(255, 255, 255, 0.7); /* white transparent layer */
+  z-index: -1; /* stays behind content */
+}
+
+
+/* Hero */
+.hero-hero{
+  background: linear-gradient(180deg, rgba(255,250,250,1) 0%, rgba(255,245,248,1) 100%), url('/static/images/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 60vh;
+  padding: 40px 0;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* Category cards */
+.category-card { border-radius: var(--card-radius); overflow: hidden; }
+.category-img { height: 300px; object-fit: cover; width: 100%; }
+
+/* Product cards equal size */
+.product-card { display:flex; flex-direction: column; border-radius: 12px; overflow:hidden; }
+.product-img { height: 320px; object-fit: cover; width:100%; }
+
+/* hover */
+.category-card:hover, .product-card:hover { transform: translateY(-8px); transition: all .25s ease; box-shadow:0 20px 40px rgba(0,0,0,0.08); }
+
+/* card body */
+.card-body { padding: 1.25rem; }
+
+/* admin form */
+input[type="file"] { padding: .4rem; }
+
+/* small screens */
+@media (max-width:767px){
+  .category-img { height: 220px; }
+  .product-img { height: 240px; }
+}
+
+/* Fix cart badge position */
+#cart-count {
+  top: 5px !important;      /* Move down */
+  right: -10px !important;  /* Adjust closer to Cart */
+  font-size: 0.75rem;
+  padding: 4px 6px;
+}
+
+footer {
+  background-color: #222; /* Dark footer */
+  color: #4e1616;
+}
+
+footer a {
+  text-decoration: none;
+  color: #ffb6c1; /* soft pink for Instagram link */
+}
+
+footer a:hover {
+  color: #fff;
+}
+

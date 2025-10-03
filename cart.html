@@ -1,0 +1,14 @@
+<!-- Cart Dropdown -->
+<li class="nav-item dropdown ms-lg-3">
+  <a class="nav-link position-relative fw-bold" href="#" id="cartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-bag-fill fs-5"></i> Cart
+    <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="cartDropdown" style="min-width: 300px;">
+    <h6 class="dropdown-header">🛍️ Your Cart</h6>
+    <div id="cart-items" class="mb-2 text-muted">No items yet</div>
+    <hr>
+    <p class="fw-bold mb-2">Total: ₹<span id="cart-total">0.00</span></p>
+    <a href="{{ url_for('cart') }}" class="btn btn-dark w-100">View Cart</a>
+  </ul>
+</li>
