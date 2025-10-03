@@ -31,13 +31,33 @@ body::before {
 
 /* Hero */
 .hero-hero{
-  background: linear-gradient(180deg, rgba(255,250,250,1) 0%, rgba(255,245,248,1) 100%), url('/static/images/hero-bg.jpg');
+  background: linear-gradient(180deg, rgba(255,250,250,1) 0%, rgba(255,245,248,0.50) 100%), url('/static/images/hero-bg.jpg');
   background-size: cover;
   background-position: center;
   height: 60vh;
   padding: 40px 0;
   display:flex; align-items:center; justify-content:center;
 }
+
+/* Collections Section Background */
+.collections-section {
+  position: relative; 
+  background: url('/static/images/hero-bg.jpg') no-repeat center center;
+  background-size: cover;
+  z-index: 0;
+}
+
+.collections-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(248, 242, 238, 0.85); 
+  z-index: -1;
+}
+
 
 /* Category cards */
 .category-card { border-radius: var(--card-radius); overflow: hidden; }
