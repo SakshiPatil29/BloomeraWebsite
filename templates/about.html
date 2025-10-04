@@ -1,24 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8 text-center">
-      <h1 class="fw-bold mb-4">About Us</h1>
-      <p class="lead">
-        At <strong>Bloomera Jewels</strong>, we bring nature closer to you through 
-        handcrafted jewelry made with real flowers. Each piece is carefully 
-        designed to capture the beauty of nature, making it timeless and unique.
-      </p>
-      <p>
-        Our mission is to create jewelry that not only complements your style 
-        but also connects you with the beauty of the natural world. 
-        Every pendant, bracelet, or pair of earrings tells its own story.
-      </p>
-      <img src="{{ url_for('static', filename='images/about.jpeg') }}" 
-     class="img-fluid rounded shadow mt-4"
-     style="max-width: 200px; height: auto;" 
-     alt="About Bloomera Jewels">
+<section class="about-section">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h1 class="fw-bold mb-4">About Us</h1>
+        <p class="lead">
+          At <strong>Bloomera Jewels</strong>, we bring nature closer to you through 
+          handcrafted jewelry made with real flowers. Each piece is carefully 
+          designed to capture the beauty of nature, making it timeless and unique.
+        </p>
+        <p>
+          Our mission is to create jewelry that not only complements your style 
+          but also connects you with the beauty of the natural world. 
+          Every pendant, bracelet, or pair of earrings tells its own story.
+        </p>
+        <img src="{{ url_for('static', filename='images/about.jpeg') }}" 
+             class="img-fluid rounded shadow mt-4"
+             style="max-width: 200px; height:auto;"
+             alt="About Bloomera Jewels">
+      </div>
     </div>
   </div>
 </section>
 {% endblock %}
+

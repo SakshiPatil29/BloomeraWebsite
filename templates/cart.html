@@ -1,16 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container my-5">
+<div class="cart-summary-box">
+<div class="container my-5" >
     <h2 class="mb-4">🛍️ Your Shopping Cart</h2>
 
     <div class="row">
+        <!-- Cart Items -->
         <div class="col-md-8">
-            <div id="cart-page-items" class="list-group mb-3">
-                </div>
+            <ul id="cart-page-items" class="list-group mb-3"></ul>
         </div>
 
+        <!-- Order Summary -->
         <div class="col-md-4">
-            <div class="card shadow-sm p-3">
+            <div class="card shadow-sm p-3" >
                 <h4 class="card-title">Order Summary</h4>
                 <hr>
                 <div class="d-flex justify-content-between fw-bold mb-2">
@@ -25,8 +27,8 @@
                     <span>Total:</span>
                     <span>₹<span id="cart-page-total">50.00</span></span>
                 </div>
-                
-                <a href="{{ url_for('checkout') }}" id="checkout-link" class="btn btn-dark w-100 mt-3">
+
+                <a href="#" id="checkout-link" class="btn btn-dark w-100 mt-3">
                     Proceed to Checkout
                 </a>
                 <a href="{{ url_for('index') }}" class="btn btn-outline-secondary w-100 mt-2">
@@ -36,47 +38,46 @@
         </div>
     </div>
 </div>
-
+</div>
 <script>
-    // Assuming 'cart' array is defined in base.html
-    let shippingCost = 50.00;
+  let shippingCost = 50.00;
 
-    function renderCartPage() {
-        const cartPageItems = document.getElementById('cart-page-items');
-        const cartSubtotal = document.getElementById('cart-subtotal');
-        const cartPageTotal = document.getElementById('cart-page-total');
-        const checkoutLink = document.getElementById('checkout-link');
+  function renderCartPage() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartPageItems = document.getElementById('cart-page-items');
+    const cartSubtotal = document.getElementById('cart-subtotal');
+    const cartPageTotal = document.getElementById('cart-page-total');
+    const checkoutLink = document.getElementById('checkout-link');
 
-        cartPageItems.innerHTML = '';
-        let subtotal = 0;
+    cartPageItems.innerHTML = '';
+    let subtotal = 0;
 
-        if (window.cart && window.cart.length === 0) {
-            cartPageItems.innerHTML = '<div class="alert alert-info text-center">Your cart is empty.</div>';
-            cartSubtotal.textContent = '0.00';
-            cartPageTotal.textContent = shippingCost.toFixed(2);
-            checkoutLink.classList.add('disabled');
-        } else {
-            window.cart.forEach((item, index) => {
-                subtotal += item.price;
-                cartPageItems.innerHTML += `
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="my-0">${item.name}</h6>
-                            <small class="text-muted">Price: ₹${item.price.toFixed(2)}</small>
-                        </div>
-                        <span class="text-muted">₹${item.price.toFixed(2)}</span>
-                        </li>
-                `;
-            });
+    if (cart.length === 0) {
+      cartPageItems.innerHTML = '<div class="alert alert-info text-center">Your cart is empty.</div>';
+      cartSubtotal.textContent = '0.00';
+      cartPageTotal.textContent = shippingCost.toFixed(2);
+      checkoutLink.classList.add('disabled');
+    } else {
+      cart.forEach((item, index) => {
+        subtotal += item.price;
+        cartPageItems.innerHTML += `
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="my-0">${item.name}</h6>
+              <small class="text-muted">Price: ₹${item.price.toFixed(2)}</small>
+            </div>
+            <span class="text-muted">₹${item.price.toFixed(2)}</span>
+          </li>
+        `;
+      });
 
-            const grandTotal = subtotal + shippingCost;
-            
-            cartSubtotal.textContent = subtotal.toFixed(2);
-            cartPageTotal.textContent = grandTotal.toFixed(2);
-            checkoutLink.classList.remove('disabled');
-        }
+      const grandTotal = subtotal + shippingCost;
+      cartSubtotal.textContent = subtotal.toFixed(2);
+      cartPageTotal.textContent = grandTotal.toFixed(2);
+      checkoutLink.classList.remove('disabled');
     }
+  }
 
-    document.addEventListener('DOMContentLoaded', renderCartPage);
+  document.addEventListener('DOMContentLoaded', renderCartPage);
 </script>
 {% endblock %}

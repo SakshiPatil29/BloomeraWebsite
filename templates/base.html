@@ -19,24 +19,25 @@
   </style>
 </head>
 <body>
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-  <div class="container position-relative">
+    <div class="container position-relative">
 
-    <!-- Navbar Toggler -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <!-- Navbar Toggler -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <!-- Centered Logo -->
-    <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="{{ url_for('index') }}">
-      <img src="{{ url_for('static', filename='images/bloomeralogo.png') }}" alt="Bloomera Logo" height="60">
-    </a>
+      <!-- Centered Logo -->
+      <a class="navbar-brand position-absolute top-50 start-50 translate-middle" href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='images/bloomeralogo.png') }}" alt="Bloomera Logo" height="60">
+      </a>
 
-    <!-- Navbar Links (Right) -->
-    <div class="collapse navbar-collapse justify-content-end" id="nav">
-      <ul class="navbar-nav align-items-center">
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">About</a></li>
+      <!-- Navbar Links -->
+      <div class="collapse navbar-collapse justify-content-end" id="nav">
+        <ul class="navbar-nav align-items-center">
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">About</a></li>
 
           <!-- Collections Dropdown -->
           <li class="nav-item dropdown">
@@ -50,8 +51,6 @@
               <li><a class="dropdown-item" href="{{ url_for('category_page', category='rings') }}">Rings</a></li>
             </ul>
           </li>
-
-        
 
           <!-- Cart Dropdown -->
           <li class="nav-item dropdown ms-lg-3">
@@ -92,32 +91,69 @@
   </main>
 
   <!-- Footer -->
-  <footer class="bg-light text-center py-4 mt-5">
+  <footer class="bg-white text-dark py-5 border-top">
     <div class="container">
-      <h5 class="fw-bold mb-3">Contact Us</h5>
-      <p class="mb-1">📞 7798865037</p>
-      <p class="mb-1">✉️ bloomera.jewels@gmail.com</p>
-      <p>
-        🌸 Follow us on 
-        <a href="https://instagram.com/bloomera.jewels" target="_blank" class="text-dark fw-bold">
-          Instagram @bloomera.jewels
-        </a>
-      </p>
-       {% if current_user.is_authenticated and current_user.is_admin %}
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_products') }}">Admin</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
-          {% else %}
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Admin</a></li>
-          {% endif %}
-      <hr class="my-3">
-      <small>© Bloomera 2025 • Handcrafted jewelry made with real flowers</small>
+      <div class="row justify-content-center align-items-start text-center text-md-start">
+        <div class="col-md-8 d-flex flex-column flex-md-row justify-content-center justify-content-md-start align-items-start gap-5 mb-4">
+          <div class="footer-support">
+            <h5 class="fw-bold mb-3 text-center text-md-start">Customer Support</h5>
+            <ul class="list-unstyled mb-0">
+              <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Returns & Exchanges</a></li>
+              <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Shipping Information</a></li>
+              <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Track Your Order</a></li>
+              <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Help Center</a></li>
+              <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Contact Us</a></li>
+               <li><a href="{{ url_for('admin_products') }}" 
+         class="text-decoration-none text-dark d-block mb-2 fw-semibold">
+         Admin
+      </a>
+    </li>
+            </ul>
+          </div>
+
+          <div class="footer-connect text-center text-md-start ms-md-5">
+            <h5 class="fw-bold mb-3">Connect With Us</h5>
+            <div class="d-flex justify-content-center justify-content-md-start mb-3 flex-wrap gap-4">
+              <a href="https://facebook.com" target="_blank" class="text-dark fs-4"><i class="bi bi-facebook"></i></a>
+              <a href="https://x.com" target="_blank" class="text-dark fs-4"><i class="bi bi-twitter-x"></i></a>
+              <a href="https://youtube.com" target="_blank" class="text-dark fs-4"><i class="bi bi-youtube"></i></a>
+              <a href="https://instagram.com/bloomera.jewels" target="_blank" class="text-dark fs-4"><i class="bi bi-instagram"></i></a>
+              <a href="https://pinterest.com" target="_blank" class="text-dark fs-4"><i class="bi bi-pinterest"></i></a>
+              <a href="https://tiktok.com" target="_blank" class="text-dark fs-4"><i class="bi bi-tiktok"></i></a>
+            </div>
+            <p class="small mb-2">Sign up for SMS alerts and be the first to know about offers!</p>
+            <a href="#" class="btn btn-dark rounded-pill px-4 py-2">
+              <i class="bi bi-envelope-fill me-2"></i> Get in the loop!
+            </a>
+          </div>
+        </div>
+
+        <div class="col-md-4 text-center text-md-end">
+          <h5 class="fw-bold mb-3">Join Our Newsletter</h5>
+          <p class="small mb-3">Stay updated with our latest collections & exclusive offers</p>
+          <form class="d-flex justify-content-center justify-content-md-end">
+            <input type="email" class="form-control me-2 w-75" placeholder="Enter your email" required>
+            <button type="submit" class="btn btn-dark">Sign Up</button>
+          </form>
+        </div>
+      </div>
+
+      <hr class="mt-4">
+      <div class="text-center small text-muted">
+        © Bloomera 2025 • Handcrafted jewelry made with real flowers
+      </div>
     </div>
   </footer>
 
   <!-- Scripts -->
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    let cart = [];
+    // Initialize cart from localStorage or empty
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
 
     function updateCart() {
       const cartItemsContainer = document.getElementById('cart-items');
@@ -143,15 +179,19 @@
 
       cartCount.textContent = cart.length;
       cartTotal.textContent = total.toFixed(2);
+      saveCart();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      updateCart();
+
       document.querySelectorAll('.add-to-cart').forEach(btn => {
         btn.addEventListener('click', function () {
           const name = this.dataset.name;
           const price = parseFloat(this.dataset.price);
 
           cart.push({ name, price });
+          saveCart();
 
           this.classList.remove('btn-success');
           this.classList.add('btn-dark');
@@ -164,3 +204,4 @@
   </script>
 </body>
 </html>
+ 

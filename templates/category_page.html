@@ -1,6 +1,7 @@
 <!-- templates/category_page.html -->
 {% extends "base.html" %}
 {% block content %}
+<section class="category-section">
 <div class="container py-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold">{{ category|capitalize }}</h2>
@@ -67,4 +68,5 @@
     {% endif %}
   </div>
 </div>
+</section>
 {% endblock %}
