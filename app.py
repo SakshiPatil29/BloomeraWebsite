@@ -1,28 +1,28 @@
 # app.py
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from dotenv import load_dotenv
+
+# Load environment variables before anything else
+load_dotenv()
+
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
 from functools import wraps
 from PIL import Image
 from authlib.integrations.flask_client import OAuth
-
 from models import db, User, Product
 from config import Config
 from google.oauth2 import id_token
 from google.auth.transport import requests
-
-
 
 # Image settings
 ALLOWED_EXT = {'png', 'jpg', 'jpeg', 'webp'}
 IMG_WIDTH = 800
 IMG_HEIGHT = 800
 
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
-
 
 def create_app():
     app = Flask(__name__)
@@ -53,6 +53,11 @@ def create_app():
         api_base_url='https://www.googleapis.com/oauth2/v1/',
         client_kwargs={'scope': 'openid email profile'}
     )
+    @app.route('/category/<category>')
+    def category_page(category):
+        # Fetch products by category
+        products = Product.query.filter_by(category=category).all()
+        return render_template('category_page.html', category=category, products=products)
 
     # ---------------- ROUTES ----------------
     @app.route('/')
@@ -84,80 +89,67 @@ def create_app():
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
         if request.method == 'POST':
+            # Get form data
+            name = request.form.get('name', '').strip()
             email = request.form.get('email', '').strip().lower()
             password = request.form.get('password', '')
             confirm = request.form.get('confirm', '')
 
+            # Password match check
             if password != confirm:
                 flash("Passwords do not match", "danger")
                 return redirect(url_for('signup'))
 
+            # Email uniqueness check
             if User.query.filter_by(email=email).first():
                 flash("Email already registered", "warning")
                 return redirect(url_for('signup'))
 
-            user = User(email=email)
+            # Create user and save to DB
+            user = User(name=name, email=email)
             user.set_password(password)
             db.session.add(user)
             db.session.commit()
+
             flash("Account created! Please login.", "success")
             return redirect(url_for('login'))
 
         return render_template('signup.html')
-    
-    load_dotenv()
 
-    GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
-    # ---------------- Google Login Route ----------------
-
-
+    # ---------------- GOOGLE LOGIN USING TOKEN ----------------
     @app.route("/google_login", methods=["POST"])
-    def google_login():
+    def google_login_token():
         """
-        Handles login/signup using Google OAuth.
-        The frontend sends the Google credential (ID token),
-        which is verified here using Google's public keys.
+        Handles login/signup using Google OAuth token sent from frontend.
         """
         try:
-            # Get token from frontend request
             data = request.get_json()
             token = data.get("credential")
-
             if not token:
                 return jsonify({"error": "Missing token"}), 400
 
-            # Verify the token using Google's library
-            idinfo = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
-
-            # Extract user info from Google
+            idinfo = id_token.verify_oauth2_token(token, requests.Request(), Config.GOOGLE_CLIENT_ID)
             email = idinfo.get("email")
             name = idinfo.get("name")
 
             if not email:
                 return jsonify({"error": "Email not found"}), 400
 
-            # Check if user exists in our database
             user = User.query.filter_by(email=email).first()
-
             if not user:
-                # If new user, create one
                 user = User(email=email)
                 user.set_password("google_oauth_user")  # dummy password
                 db.session.add(user)
                 db.session.commit()
 
-            # Log the user in using Flask-Login
             login_user(user)
-
             return jsonify({"message": "Login successful"}), 200
 
         except ValueError:
-            # Invalid token
             return jsonify({"error": "Invalid token"}), 400
         except Exception as e:
             print("Google login error:", e)
             return jsonify({"error": "Something went wrong"}), 500
-
 
     @app.route('/logout')
     @login_required
@@ -168,7 +160,7 @@ def create_app():
 
     # ---------------- GOOGLE OAUTH ROUTES ----------------
     @app.route('/auth/google')
-    def google_login():
+    def google_authorize_redirect():
         redirect_uri = url_for('google_callback', _external=True)
         return google.authorize_redirect(redirect_uri)
 
@@ -182,7 +174,6 @@ def create_app():
         user = User.query.filter_by(email=email).first()
 
         if not user:
-            # create a new user if not found
             user = User(email=email)
             db.session.add(user)
             db.session.commit()
@@ -218,7 +209,6 @@ def create_app():
                 save_path = os.path.join(app.static_folder, 'images', filename)
                 file.save(save_path)
 
-                # Process image
                 try:
                     img = Image.open(save_path).convert('RGB')
                     w, h = img.size
@@ -259,3 +249,4 @@ def create_app():
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True)
+m

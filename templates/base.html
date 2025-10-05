@@ -85,7 +85,7 @@
             <li class="nav-item ms-1">
               <div id="g_id_onload"
                    data-client_id="{{ GOOGLE_CLIENT_ID }}"
-                   data-login_uri="{{ url_for('google_login', _external=True) }}"
+                   data-login_uri="{{ url_for('google_login_token', _external=True) }}"
                    data-auto_prompt="false">
               </div>
               <div class="g_id_signin" data-type="standard" data-size="medium"></div>
@@ -241,7 +241,7 @@
   <script>
   window.onload = function () {
     window.handleCredentialResponse = function (response) {
-      fetch("/google_login", {
+      fetch("/google_login_token", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ credential: response.credential })
@@ -257,7 +257,5 @@
     };
   };
 </script>
-
-~~
 </body>
 </html>
