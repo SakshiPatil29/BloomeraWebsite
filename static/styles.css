@@ -14,6 +14,38 @@ body {
   z-index: 0;
 }
 
+/* Simple attractive navbar */
+.navbar {
+  background-color: #f8c8d8; /* soft pink */
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  padding: 0.5rem 1.5rem;
+}
+
+.navbar .nav-link {
+  color: #4e1616;
+  font-weight: 500;
+  margin: 0 0.05rem;
+  transition: color 0.3s;
+}
+
+.navbar .nav-link:hover {
+  color: #b55585;
+}
+
+.navbar .btn-signup {
+  background-color: #ec70ae;
+  color: #fff;
+  border-radius: 25px;
+  padding: 0.35rem 1rem;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.navbar .btn-signup:hover {
+  background-color: #daa8d0;
+  color: #fff;
+}
 
 /* Semi-transparent overlay */
 body::before {
@@ -81,30 +113,85 @@ body::before {
 
 .banner-container {
   position: relative;
-  max-height: 500px;
+  text-align: left;
   overflow: hidden;
 }
 
 .banner-image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  display: block;
+  border-radius: 10px;
 }
 
+/* Position and general text style */
 .banner-text {
   position: absolute;
   top: 50%;
-  left: 5%;
+  left: 6%;
   transform: translateY(-50%);
-  color: #ffffff;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+  color: #fff;
+  text-shadow: 3px 3px 8px rgba(255, 255, 255, 0.4);
 }
 
-.banner-text .main-text {
-  font-size: 5rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+/* Main Heading - Big and Bold */
+.main-text {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #ec70ae, #daa8d0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: fadeInUp 1.5s ease;
 }
+
+/* Sub text with a clean elegant look */
+.sub-text {
+  font-size: 1.3rem;
+  margin-top: 10px;
+  font-weight: 500;
+  color: #daa8d0;
+  text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Coupon box styling */
+.coupon-box {
+  background: #ff007f;
+  color: #fff;
+  font-weight: bold;
+  padding: 5px 12px;
+  border-radius: 8px;
+  margin-left: 5px;
+  transition: all 0.3s ease;
+}
+
+.coupon-box:hover {
+  background: #ffb400;
+  transform: scale(1.1);
+}
+
+/* Simple fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Make it responsive */
+@media (max-width: 768px) {
+  .main-text {
+    font-size: 2rem;
+  }
+  .sub-text {
+    font-size: 1rem;
+  }
+}
+
 .about-section {
   background: url("/static/images/flowers-bg.png") no-repeat center center fixed;
   background-size: cover;

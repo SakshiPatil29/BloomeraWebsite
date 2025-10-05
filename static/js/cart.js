@@ -17,5 +17,5 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("cart-count").innerText = cart.length;
       document.getElementById("cart-total").innerText = total.toFixed(2);
     });
-  });
+  }); 
 });

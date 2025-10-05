@@ -8,6 +8,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  <!-- Google Sign-In SDK -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   <style>
     /* Adjust cart badge position */
     #cart-count {
@@ -16,13 +20,30 @@
       top: 0.4rem;
       right: -0.6rem;
     }
+
+    /* Google Sign-In button */
+    .gsi-btn {
+      background-color: white;
+      border: 1px solid #ddd;
+      padding: 6px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .gsi-btn img {
+      width: 20px;
+      height: 20px;
+    }
   </style>
 </head>
 <body>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container position-relative">
-
       <!-- Navbar Toggler -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
         <span class="navbar-toggler-icon"></span>
@@ -52,7 +73,26 @@
             </ul>
           </li>
 
-          <!-- Cart Dropdown -->
+          <!-- User Auth Links -->
+          {% if current_user.is_authenticated %}
+            <li class="nav-item ms-3">
+              <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </li>
+          {% else %}
+            <li class="nav-item ms-1">
+              <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
+            </li>
+            <li class="nav-item ms-1">
+              <div id="g_id_onload"
+                   data-client_id="{{ GOOGLE_CLIENT_ID }}"
+                   data-login_uri="{{ url_for('google_login', _external=True) }}"
+                   data-auto_prompt="false">
+              </div>
+              <div class="g_id_signin" data-type="standard" data-size="medium"></div>
+            </li>
+          {% endif %}
+
+          <!-- Cart -->
           <li class="nav-item dropdown ms-lg-3">
             <a class="nav-link position-relative fw-bold" href="#" id="cartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-bag-fill fs-5"></i> Cart
@@ -103,11 +143,7 @@
               <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Track Your Order</a></li>
               <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Help Center</a></li>
               <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Contact Us</a></li>
-               <li><a href="{{ url_for('admin_products') }}" 
-         class="text-decoration-none text-dark d-block mb-2 fw-semibold">
-         Admin
-      </a>
-    </li>
+              <li><a href="{{ url_for('admin_products') }}" class="text-decoration-none text-dark d-block mb-2 fw-semibold">Admin</a></li>
             </ul>
           </div>
 
@@ -148,7 +184,7 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Initialize cart from localStorage or empty
+    // Cart functionality
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     function saveCart() {
@@ -202,6 +238,26 @@
       });
     });
   </script>
+  <script>
+  window.onload = function () {
+    window.handleCredentialResponse = function (response) {
+      fetch("/google_login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential: response.credential })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.message) {
+          location.reload(); // Refresh to show logged-in user
+        } else {
+          alert("Google login failed!");
+        }
+      });
+    };
+  };
+</script>
+
+~~
 </body>
 </html>
- 
