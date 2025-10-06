@@ -15,6 +15,14 @@ from models import db, User, Product
 from config import Config
 from google.oauth2 import id_token
 from google.auth.transport import requests
+from flask import abort
+import qrcode
+from io import BytesIO
+import base64
+from flask import request
+from models import Payment
+from flask import request, jsonify, make_response, session, redirect, url_for
+import json
 
 # Image settings
 ALLOWED_EXT = {'png', 'jpg', 'jpeg', 'webp'}
@@ -82,9 +90,30 @@ def create_app():
             if user and user.check_password(password):
                 login_user(user)
                 flash('Logged in successfully.', 'success')
-                return redirect(url_for('index'))
+
+                # Redirect based on role
+                if user.is_admin:
+                    return redirect(url_for('admin_products'))
+                else:
+                    return redirect(url_for('index'))
+
             flash('Invalid credentials', 'danger')
         return render_template('login.html')
+
+    @app.route('/admin/products/delete/<int:product_id>', methods=['POST'])
+    @login_required
+    def delete_product(product_id):
+        if not current_user.is_admin:
+            flash('Admin access required', 'danger')
+            return redirect(url_for('index'))
+
+        product = Product.query.get_or_404(product_id)
+        db.session.delete(product)
+        db.session.commit()
+        flash('Product deleted successfully.', 'success')
+        return redirect(url_for('admin_products'))
+    
+#signup
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
@@ -158,6 +187,62 @@ def create_app():
         flash('Logged out', 'info')
         return redirect(url_for('index'))
 
+
+    
+
+#checkout
+    @app.route('/checkout', methods=['GET', 'POST'])
+    def checkout():
+        cart = []  # We'll calculate the amount from JS/cart later or pass it from session
+        # For demo, let's assume the amount comes from query param or session
+        amount = request.args.get('amount', 0)
+
+        # Generate QR code for your UPI
+        upi_id = "7798865037@kotak811"
+        qr_img = qrcode.make(f"upi://pay?pa={upi_id}&pn=Bloomera&tn=Order+Payment&am={amount}")
+
+        buffered = BytesIO()
+        qr_img.save(buffered, format="PNG")
+        qr_b64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
+
+        if request.method == 'POST':
+            email = request.form.get('email')
+            transaction_id = request.form.get('transaction_id')
+
+            if not email or not transaction_id:
+                flash("Please provide both email and transaction ID.", "danger")
+                return redirect(request.url)
+
+            payment = Payment(email=email, transaction_id=transaction_id, amount=float(amount))
+            db.session.add(payment)
+            db.session.commit()
+
+            # Optional: Send email here using Flask-Mail (you already added it)
+            flash("Payment info submitted. Thank you!", "success")
+            return redirect(url_for('index'))
+
+        return render_template("checkout.html", qr_b64=qr_b64, amount=amount)
+
+
+        # Generate QR code for your UPI ID
+        upi_id = "7798865037@kotak811"
+        qr = qrcode.make(f"upi://pay?pa={upi_id}&pn=Bloomera&tn=Order+Payment&am={amount}")
+        buffered = BytesIO()
+        qr.save(buffered, format="JPEG")
+        qr_b64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
+
+        return render_template("checkout.html", amount=amount, qr_b64=qr_b64)
+
+
+    @app.route('/add_product', methods=['GET', 'POST'])
+    @login_required
+    def add_product():
+        if not current_user.is_admin: 
+            abort(403)  # Forbidden
+        if request.method == 'POST':
+            # handle product addition
+            pass
+        return render_template('add_product.html')
     # ---------------- GOOGLE OAUTH ROUTES ----------------
     @app.route('/auth/google')
     def google_authorize_redirect():
@@ -249,4 +334,3 @@ def create_app():
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True)
-m

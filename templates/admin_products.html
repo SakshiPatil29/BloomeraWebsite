@@ -1,8 +1,9 @@
-<!-- templates/admin_products.html -->
 {% extends "base.html" %}
 {% block content %}
 <div class="container py-5">
-  <div class="d-flex justify-content-between">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Admin - Manage Products</h2>
     <div>
       <a class="btn btn-outline-secondary me-2" href="{{ url_for('index') }}">View Site</a>
@@ -12,6 +13,7 @@
 
   <hr>
 
+  <!-- Add New Product -->
   <div class="card p-4 mb-4">
     <h5>Add New Product</h5>
     <form method="POST" enctype="multipart/form-data" class="row g-3">
@@ -44,24 +46,40 @@
     </form>
   </div>
 
-  <h5>All products</h5>
-  <table class="table">
-    <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th></th></tr></thead>
+  <!-- Products Table -->
+  <h5>All Products</h5>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
     <tbody>
       {% for p in products %}
       <tr>
-        <td><img src="{{ url_for('static', filename='images/' ~ (p.image_url or 'placeholder.jpg')) }}" width="80"></td>
+        <td>
+          <img src="{{ url_for('static', filename='images/' ~ (p.image_url or 'placeholder.jpg')) }}" width="80">
+        </td>
         <td>{{ p.name }}</td>
-        <td>{{ p.category }}</td>
+        <td>{{ p.category.title() }}</td>
         <td>₹{{ "%.2f"|format(p.price) }}</td>
         <td>
-          <form method="POST" action="{{ url_for('delete_product', product_id=p.id) }}" onsubmit="return confirm('Delete product?')">
+          <form method="POST" action="{{ url_for('delete_product', product_id=p.id) }}" onsubmit="return confirm('Are you sure you want to delete this product?');">
             <button class="btn btn-sm btn-danger">Delete</button>
           </form>
         </td>
       </tr>
+      {% else %}
+      <tr>
+        <td colspan="5" class="text-center text-muted">No products found.</td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
+
 </div>
 {% endblock %}
